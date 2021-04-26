@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {isAuthorized} from '../helpers/useAuth'
+import {isAuthenticated} from '../helpers/useAuth'
 import {useRouter} from "vue-router"
 
 export default {
@@ -54,7 +54,7 @@ export default {
 
         const router = useRouter()
         const logout = () => {
-            isAuthorized.value = false
+            isAuthenticated.value = false
             router.push('/')
         }
 

@@ -7,21 +7,18 @@ const route = useRoute()
 const getClients = () => {
     const clients = ref([])
     const error = ref(null)
-    const baseURI = 'http://localhost:3000/clients'
+    const baseURI = 'http://localhost:3010/api/clients'
 
     const load = async () => {
         try {
             let res = await axios.get(baseURI)
             clients.value = res.data
         }
-
         catch (err) {
             console.log(err)
         }
-       
     }
     return { clients, error, load }
-
 }
 
 export default getClients

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navbar/>
     <Subnav/>
     <DisplayTicket/>
     <DisplayTicket/>
@@ -9,18 +10,17 @@
 
 <script>
 import {onMounted} from 'vue'
-import {isAuthorized} from '../helpers/useAuth'
+import {isAuthenticated} from '../helpers/useAuth'
 import Subnav from '../components/Subnav'
 import Subnav2 from '../components/SubNav2'
 import DisplayTicket from '../components/DisplayTicket'
+import Navbar from '../components/Navbar'
 
 export default {
   name: 'Main',
-  components: {Subnav, Subnav2, DisplayTicket},
+  components: {Subnav, Subnav2, DisplayTicket, Navbar},
   setup(){
-      onMounted(() => {
-        console.log("isAuthorized: " + isAuthorized.value)
-      })
+      
     }
 }
 </script>

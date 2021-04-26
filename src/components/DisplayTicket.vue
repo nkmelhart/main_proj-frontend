@@ -47,7 +47,6 @@ export default{
     })
 
     const statusButton = computed(() => {
-      console.log(isInClosed.value)
       if(isInClosed.value){
         return "Re-open Ticket"
       }
@@ -55,8 +54,6 @@ export default{
     })
     
     onMounted(() => {
-      console.log(isInClosed.value)
-      console.log(statusButton.value)
       
    })
 

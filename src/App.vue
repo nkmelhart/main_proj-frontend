@@ -1,22 +1,18 @@
 <template>
-    <Navbar/>
   <router-view/>
 </template>
 
 <script>
-  import {onMounted, onUpdated} from 'vue'
   import Navbar from './components/Navbar.vue'
-  import {isAuthorized} from './helpers/useAuth'
+  import {isAuthenticated} from './helpers/useAuth'
 
   export default {
     name: 'App',
     components: {Navbar},
-    setup(){},
-    computed: {
-      checkAuth() {
-        return isAuthorized.value
-      }
-    }
+    setup(){
+      console.log('isAuthenticated? : ', isAuthenticated.value)
+      return { isAuthenticated }
+    },
   }
 
 </script>
