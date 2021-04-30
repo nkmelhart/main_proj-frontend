@@ -1,8 +1,5 @@
 import axios from 'axios'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
 
 const getClients = () => {
     const clients = ref([])

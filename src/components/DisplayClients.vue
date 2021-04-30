@@ -98,7 +98,6 @@ export default {
         const route = useRoute()
         console.log(props.clients)
     }
-
 }
 </script>
 

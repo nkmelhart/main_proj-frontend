@@ -5,7 +5,7 @@
                 <div class="form-group mt-5">
                     <p>Login</p>
                     <input type="text" class="form-control mb-2 ipt" name="email" placeholder="Email" required="required" v-model="email">
-                    <input type="text" class="form-control mb-2 ipt" name="password" placeholder="Password" required="required" v-model="password">
+                    <input type="password" class="form-control mb-2 ipt" name="password" placeholder="Password" required="required" v-model="password">
                     <button type="submit" @click="handleLogin" class="btn btn-primary btn-lg btn-block login-btn">Submit</button>
                 </div>
                 <div class="mt-3" v-if="isError"><p>{{loginError}}</p></div>

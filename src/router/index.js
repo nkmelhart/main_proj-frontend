@@ -129,7 +129,7 @@ const routes = [
   },
   {
     path: '/viewnotes/:id',
-    name: 'ViewVotes',
+    name: 'ViewNotes',
     component: ViewNotes,
     props: true,
     beforeEnter: (to, from) => {

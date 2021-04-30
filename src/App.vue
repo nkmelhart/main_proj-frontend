@@ -1,4 +1,5 @@
 <template>
+  <Navbar v-if="isAuthenticated"/>
   <router-view/>
 </template>
 

@@ -12,3 +12,15 @@ export const statusArray = ref({
     id9: "Waiting on Vendor",
     id10: "On Hold"
 })
+
+export const normalStatus = ref([
+    'New', 'Open', 'Contact Customer', 'Scheduled', 'Ongoing'
+])
+
+export const highStatus = ref([
+    'Code Red', 'Code Yellow'
+])
+
+export const lowStatus = ref([
+    'Waiting on Parts', 'Waiting on Customers', 'Waiting on Vendors', 'On Hold'
+])
