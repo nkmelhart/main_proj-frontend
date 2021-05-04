@@ -5,6 +5,11 @@
       <p v-if="ticket">Ticket Title: {{ticket.title}}</p>
       <hr>
       <DisplayNotes v-if="notes.length" :notes="notes"/>
+      <div v-else>
+        <div class="container">
+          <p>No notes</p>
+        </div>
+      </div>
       </div>
   </div>
 </template>

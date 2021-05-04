@@ -1,27 +1,54 @@
 <template>
-  <Subnav @subNavClick="toMain" :statusEntered="statusEntered"/>
   <div v-for="status in statuses">
   <div class="main-con card container mb-4">
     <div class="card shadow border border-2">
-      <div class="card-header fw-bolder h5">
-        {{status}}
+      <div class="card-header d-flex justify-content-between">
+        <div>
+          <h4 class="fw-bolder mt-2">{{status}}</h4>
+        </div>
       </div>
       <div v-for="ticket in tickets" :key="ticket._id">
       <div v-if="status === ticket.status" class="card-body border-bottom">
-        <h5 class="card-title">{{ticket.title}}</h5>
-        <p class="card-text">{{ticket.description}}</p>
-        <div class="btn-toolbar">
-          <router-link :to="{ name: 'ViewNotes', params: { id: ticket._id} }" class="btn btn-primary me-3">View Notes</router-link>
-          <router-link :to="{ name: 'AddNotes', params: { id: ticket._id} }"  class="btn btn-primary me-3">Add Notes</router-link>
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle me-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            {{statusButton}}
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li v-for="status in statusArray" :key="status"><a class="dropdown-item" href="#">{{status}}</a></li>
-            </ul>
+        <div class="row">
+          <div class="col-8 d-flex flex-column">
+            <h5 class="card-title border-bottom pb-2">{{ticket.title}}</h5>
+            <p class="card-text mt-2">{{ticket.description}}</p>
+              <div class="btn-toolbar mt-auto">
+                <router-link :to="{ name: 'ViewNotes', params: { id: ticket._id} }" class="btn btn-primary me-3">View Notes</router-link>
+                <router-link :to="{ name: 'AddNotes', params: { id: ticket._id} }"  class="btn btn-primary me-3">Add Notes</router-link>
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle me-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{statusButton}}
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li v-for="status in allStatus" @click="handleChangeStatus(status, ticket._id, ticket, statuses)" :key="status"><a class="dropdown-item" href="#">{{status}}</a></li>
+                  </ul>
+                </div>
+                <a v-if="!isInClosed" href="#" class="btn btn-primary me-3">Close Ticket</a>
+              </div>
           </div>
-          <a v-if="!isInClosed" href="#" class="btn btn-primary me-3">Close Ticket</a>
+          <div class="col-4 border-start">
+            <table class="table ">
+              <tbody>
+                <tr>
+                  <th scope="row">Ticket ID:</th>
+                  <td>{{ticket._id}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Client:</th>
+                  <td>{{ticket.client.name}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Point of Contact:</th>
+                  <td>{{ticket.contactName}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Point of Contact:</th>
+                  <td>{{ticket.contactNumber}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       </div>
@@ -32,16 +59,17 @@
 
 <script>
 
-import { statusArray } from '../helpers/useStatus'
+import { allStatus } from '../helpers/useStatus'
 import { ref } from 'vue'
+import { changeStatus } from '../helpers/postTicket'
 import Subnav from '../components/Subnav'
 import { useRoute } from 'vue-router'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 
 export default{
   name: 'DisplayTickets',
   props: ['tickets', 'statusEntered'],
-  emits: ['filterTickets'],
+  emits: ['filterTickets', 'statusChanged'],
   components: {Subnav},
   setup(props, {emit}){
 
@@ -62,20 +90,38 @@ export default{
     })
     
     const statuses = computed( () => {
-      const newSet = new Set()
+      const ticketStatusSet = new Set()
+      const statusSetOrdered = []
       props.tickets.forEach( el => {
-        newSet.add(el.status)
+        ticketStatusSet.add(el.status)
       })
-      return newSet
+
+      allStatus.value.forEach( el1 => {
+        ticketStatusSet.forEach( el2 => {
+          if (el1 === el2){
+            statusSetOrdered.push(el1)
+          }
+        })
+      })
+      return statusSetOrdered
     })
 
-    const toMain = (statusEntered) => {
-      emit('filterTickets', statusEntered)
+    const handleChangeStatus = async (status, ticketId, ticket, statuses) => {
+      const res = await changeStatus(status, ticketId)
+      // if(res.value === 200){
+      //   console.log('Success: ', res.value)
+      // }
+      console.log(statuses)
+      ticket.status = status
+      console.log(statuses)
+      emit('statusChanged')
     }
 
-    console.log(statuses.value)
+    const handleCloseClick = () => {
 
-    return { statusArray, isInClosed, statusButton, statuses, toMain }
+    }
+
+    return { isInClosed, statusButton, statuses, allStatus, handleChangeStatus }
   }
 }
 

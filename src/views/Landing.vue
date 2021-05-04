@@ -17,7 +17,7 @@
 <script>
     import { isAuthenticated, auth } from '../helpers/useAuth'
     import {useRouter} from 'vue-router'
-    import { ref } from 'vue'
+    import { ref, onMounted } from 'vue'
 
     export default {
 
@@ -29,6 +29,10 @@
         const email = ref('')
         const password = ref('')
         const delay = ms => new Promise(res => setTimeout(res, ms));
+
+        onMounted( () => {
+            isAuthenticated.value = false
+        })
 
         const handleLogin = async () => {
             

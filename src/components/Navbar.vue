@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow">
   <div class="container">
     <a class="navbar-brand" href="#">NovaTickets</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,14 +15,14 @@
         </li>
         <li class="nav-item dropdown me-3">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            View
+            Search
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><router-link :to="{ name: 'SearchTickets'}" class="dropdown-item">Active Tickets By Search</router-link></li>
+            <li><router-link :to="{ name: 'SearchTickets'}" class="dropdown-item">Tickets</router-link></li>
             <li><hr class="dropdown-divider"></li>
-            <li><router-link :to="{ name: 'ClosedTickets' }" class="dropdown-item" href="#">Closed Tickets</router-link></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><router-link :to="{ name: 'ViewClients'}" class="dropdown-item" >Client Info</router-link></li>
+            <!-- <li><router-link :to="{ name: 'ClosedTickets' }" class="dropdown-item" href="#">Closed Tickets</router-link></li>
+            <li><hr class="dropdown-divider"></li> -->
+            <li><router-link :to="{ name: 'ViewClients'}" class="dropdown-item">Clients</router-link></li>
           </ul>
         </li>
         <li class="nav-item dropdown me-3">

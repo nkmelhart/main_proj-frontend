@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import {isAuthorized} from '../helpers/useAuth'
+    import {isAuthenticated} from '../helpers/useAuth'
 
     export default {
 
@@ -14,7 +14,7 @@
         setup() {
             
             const checkAuth = () => {
-                return isAuthorized.value
+                return isAuthenticated.value
             }
             return {checkAuth}
         }
