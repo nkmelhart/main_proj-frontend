@@ -65,7 +65,6 @@
       </form>
       </div>
     </div>
-    <SuccessToast/>
 </template>
 
 <script>
@@ -74,13 +73,12 @@ import { ref, watch, computed } from 'vue'
 import getUsers from '../helpers/getUsers'
 import { registerUser, updateUser } from '../helpers/postUser'
 import ErrorModal from '../components/ErrorModal'
-import SuccessToast from '../components/SuccessToast'
 
 export default {
     name: 'UserForm',
-    components: {ErrorModal, SuccessToast},
+    components: {ErrorModal},
     props: ["selectedTab"],
-    setup(props){
+    setup(props, { emit }){
         const { load, users, error } = getUsers()
         const userSelect = ref('defaultUser')
         const userId = ref(null)
@@ -100,6 +98,7 @@ export default {
         load()
 
         const clearFields = () => {
+            userSelect.value = 'defaultUser'
             userName.value = null
             email.value = null
             roleSelect.value = "defaultRole"
@@ -121,6 +120,7 @@ export default {
             await registerUserSend(userName.value, password.value, email.value, roleSelect.value, phone.value, userNotes.value)
             clearFields()
             load()
+            emit('emitToast')
         }
 
         const handleEditClick = async () => {
@@ -128,6 +128,7 @@ export default {
             if(!errorUpdateTriggered.value){
               clearFields()
               load()
+              emit('emitToast')
             }
         }
 

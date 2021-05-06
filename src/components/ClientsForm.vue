@@ -73,7 +73,7 @@ export default {
     name: 'ClientForm',
     components: {ErrorModal},
     props: ["selectedTab"],
-    setup(props){
+    setup(props, { emit }){
         const { load, clients, error } = getClients()
         const clientSelect = ref('defaultClient')
         const clientId = ref(null)
@@ -124,18 +124,18 @@ export default {
         const handleAddClick = async () => {
             await createClientSend(clientName.value, clientPoc.value, pocEmail.value, phone.value, address.value, city.value, state.value, zip.value, clientNotes.value)
             if(!errorCreateTriggered.value){
-              console.log('here3')
               clearFields()
               load()
+              emit('emitToast')
             }
         }
 
         const handleEditClick = async () => {
             await updateClientSend(clientId.value, clientName.value, clientPoc.value, pocEmail.value, phone.value, address.value, city.value, state.value, zip.value, clientNotes.value)
             if(!errorUpdateTriggered.value){
-              console.log('here4')
               clearFields()
               load()
+              emit('emitToast')
             }
         }
 
@@ -151,14 +151,12 @@ export default {
         watch(() => {
           if(createError.value){
             errorCreateTriggered.value = true
-            console.log('here1')
           }
         })
 
         watch(() => {
           if(updateError.value){
             errorUpdateTriggered.value = true
-            console.log('here2')
           }
         })
 

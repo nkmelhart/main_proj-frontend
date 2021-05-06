@@ -1,7 +1,7 @@
 <template>
 <ErrorModal v-if="errorTriggered" :error="error" @modalClose="errorTriggered = false" />
-<SuccessModal v-if="successTriggered" :success="'Submission successful'" 
-@modalClose="successTriggered = false; router.push('/main');" />
+<!-- <SuccessModal v-if="successTriggered" :success="'Submission successful'" 
+@modalClose="successTriggered = false; router.push('/main');" /> -->
   <div class="container">
     <h2 class="mt-4">Create Ticket</h2>
     <hr class="mb-4">
@@ -63,11 +63,12 @@ import { allStatus } from '../helpers/useStatus'
 import getTickets from '../helpers/getTickets'
 import { createTicket } from '../helpers/postTicket'
 import ErrorModal from '../components/ErrorModal'
-import SuccessModal from '../components/SuccessModal'
+import toast from '../helpers/successToast'
+// import SuccessModal from '../components/SuccessModal'
 
 export default {
   name: "Create",
-  components: { ErrorModal, SuccessModal },
+  components: { ErrorModal },
   emit: ['reloadAfterCreate'],
   setup(props, { emit }){
 
@@ -84,6 +85,16 @@ export default {
     const title = ref('')
     const details = ref('')
     const statusSelect = ref('defaultStatus')
+
+    const clearFields = () => {
+      title.value = null,
+      clientSelect.value = 'defaultClient',
+      statusSelect.value = 'defaultStatus',
+      poc.value = null,
+      phone.value = null,
+      userSelect.value = null,
+      details.value = null
+    }
 
 
     onMounted( async () => {
@@ -104,14 +115,18 @@ export default {
     }
 
     const handleSubmit = async () => {
-      await createTicketSend(title, details, poc, phone, statusSelect, clientSelect)
+      await createTicketSend(title.value, details.value, poc.value, phone.value, statusSelect.value, clientSelect.value)
+        if(successTriggered.value){
+          clearFields()
+          toast('Submission Successful')
+        }
     }
 
     const handleCancel = () => {
       router.push('/main')
     }
 
-    return{handleCancel, handleClientClick, handleSubmit, allStatus, clients, users, title, poc, phone, details, clientSelect, statusSelect, userSelect, errorTriggered, successTriggered, error, router}
+    return{handleCancel, handleClientClick, handleSubmit, allStatus, clients, users, title, poc, phone, details, clientSelect, statusSelect, userSelect, errorTriggered, successTriggered, error, router, toast}
   }
 
 }

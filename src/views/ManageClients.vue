@@ -1,7 +1,7 @@
 <template>
   <div>
     <ManageClientsSubNav @addClientClicked="modifySelectedTab('Add')" @editClientClicked="modifySelectedTab('Edit')" />
-    <ClientsForm :selectedTab="selectedTab" />
+    <ClientsForm :selectedTab="selectedTab" @emitToast="toast('Submission Successful')"/>
   </div>
 </template>
 
@@ -10,6 +10,7 @@
 import { ref } from 'vue'
 import ManageClientsSubNav from '../components/ManageClientsSubNav'
 import ClientsForm from '../components/ClientsForm.vue'
+import toast from '../helpers/successToast'
 
 export default {
   name: 'ManagerUsers',
@@ -21,7 +22,7 @@ export default {
       selectedTab.value = term
     }
 
-    return { selectedTab, modifySelectedTab }
+    return { selectedTab, modifySelectedTab, toast }
   }
 }
 </script>
