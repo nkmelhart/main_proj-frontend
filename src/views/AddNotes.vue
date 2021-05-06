@@ -1,4 +1,5 @@
 <template>
+<ErrorModal v-if="errorTriggered" :error="error" @modalClose="errorTriggered = !errorTriggered" />
   <div class='container'>
       <div>
       <h2 class="mt-4">Add Notes for Ticket #{{id}}</h2>
@@ -20,29 +21,43 @@
 
 <script>
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import ErrorModal from '../components/ErrorModal'
 
 export default {
     name: 'AddNotes',
     props: ['id'],
-    components: {},
+    components: {ErrorModal},
     setup(props) {
 
       const newNote = ref('')
       const router = useRouter()
+      const errorTriggered = ref(false)
+      const error = ref(null)
+
+      watch(() => {
+        if(error.value){
+          errorTriggered.value = true
+        }
+      })
 
       const handleSubmit = async () => {
+        try{
           await axios.post(process.env.VUE_APP_NOTE_ADD_URI + '/' + props.id + '/notes', {
             note: newNote.value,
             enteredBy: 'Nolan.. for now',
             ticket: props.id
           })
-
-          router.push({ name: 'Main' })
+          router.push(`/viewnotes/${props.id}`)
+        } catch(err){
+            if(err.response){
+              error.value = err.response
+            }
+        }
       }
-      return { handleSubmit, newNote }
+      return { handleSubmit, newNote, error, errorTriggered }
   }
 }
 

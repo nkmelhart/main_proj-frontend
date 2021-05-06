@@ -30,10 +30,6 @@
         const password = ref('')
         const delay = ms => new Promise(res => setTimeout(res, ms));
 
-        onMounted( () => {
-            isAuthenticated.value = false
-        })
-
         const handleLogin = async () => {
             
             try{

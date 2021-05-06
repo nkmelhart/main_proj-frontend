@@ -1,5 +1,6 @@
 <template>
   <div>
+    <TestAlert v-if="false" />
     <Subnav v-if="isAuthenticated"
     @filteredTickets="handleFilter" :statusEntered="statusEntered" 
     @reloadActive="load"/>
@@ -10,6 +11,7 @@
       <div v-if="ticketsResStatus === 200">
         <p>No Tickets</p>
       </div>
+      <Spinner v-else></Spinner>
       <div v-if="ticketsResStatus !== 200 && ticketsResStatus !== null">
         <p>Server error: {{ticketsResStatus}}</p>
       </div>
@@ -21,14 +23,15 @@
 import {onMounted, ref} from 'vue'
 import {isAuthenticated} from '../helpers/useAuth'
 import Subnav from '../components/Subnav'
-//import Subnav2 from '../components/SubNav2'
 import DisplayTicket from '../components/DisplayTicket'
 import Navbar from '../components/Navbar'
+import TestAlert from '../components/TestAlert'
+import Spinner from '../components/Spinner'
 import getTickets from "../helpers/getTickets"
 
 export default {
   name: 'Main',
-  components: {Subnav, /*Subnav2,*/ DisplayTicket, Navbar},
+  components: {Subnav, DisplayTicket, Navbar, TestAlert, Spinner},
   props: ['statusEntered'],
   setup(){
     

@@ -30,9 +30,9 @@
             Manage
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><router-link :to="{name: 'UserEdit'}" class="dropdown-item" >Users</router-link></li>
-            <li><hr class="dropdown-divider"></li>
             <li><router-link :to="{name: 'ClientEdit'}" class="dropdown-item">Clients</router-link></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><router-link :to="{name: 'UserEdit'}" class="dropdown-item" >Users</router-link></li>
           </ul>
         </li>
       </ul>

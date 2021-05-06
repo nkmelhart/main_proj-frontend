@@ -11,9 +11,12 @@
       <div v-if="status === ticket.status" class="card-body border-bottom">
         <div class="row">
           <div class="col-8 d-flex flex-column">
+            <div class="mb-auto">
             <h5 class="card-title border-bottom pb-2">{{ticket.title}}</h5>
-            <p class="card-text mt-2">{{ticket.description}}</p>
-              <div class="btn-toolbar mt-auto">
+            <p class="card-text mt-3">{{ticket.description}}</p>
+            <i class="mt-2">- Submitted on {{convertDate((ticket.createdAt).toString())}}</i>
+            </div>
+              <div class="btn-toolbar mt-3">
                 <router-link :to="{ name: 'ViewNotes', params: { id: ticket._id} }" class="btn btn-primary me-3">View Notes</router-link>
                 <router-link :to="{ name: 'AddNotes', params: { id: ticket._id} }"  class="btn btn-primary me-3">Add Notes</router-link>
                 <div class="dropdown">
@@ -59,12 +62,12 @@
 
 <script>
 
-import { allStatus } from '../helpers/useStatus'
-import { ref } from 'vue'
-import { changeStatus } from '../helpers/postTicket'
 import Subnav from '../components/Subnav'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { allStatus } from '../helpers/useStatus'
+import { changeStatus } from '../helpers/postTicket'
+import convertDate from '../helpers/convertDate'
 
 export default{
   name: 'DisplayTickets',
@@ -121,7 +124,7 @@ export default{
 
     }
 
-    return { isInClosed, statusButton, statuses, allStatus, handleChangeStatus }
+    return { isInClosed, statusButton, statuses, allStatus, handleChangeStatus, convertDate }
   }
 }
 

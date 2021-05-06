@@ -3,7 +3,7 @@
     <div class="main-con card container mb-4">
   <div class="card">
     <div class="card-header fw-bold h5">
-      Note Submitted at: {{note.createdAt}} by {{note.enteredBy}}
+      Note Submitted at: {{Date(note.createdAt).toString()}} by {{note.enteredBy}}
     </div>
     <div class="card-body border-bottom">
       <p class="card-title"></p>

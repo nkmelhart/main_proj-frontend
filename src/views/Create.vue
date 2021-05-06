@@ -1,4 +1,7 @@
 <template>
+<ErrorModal v-if="errorTriggered" :error="error" @modalClose="errorTriggered = false" />
+<SuccessModal v-if="successTriggered" :success="'Submission successful'" 
+@modalClose="successTriggered = false; router.push('/main');" />
   <div class="container">
     <h2 class="mt-4">Create Ticket</h2>
     <hr class="mb-4">
@@ -55,18 +58,23 @@
 
 <script>
 import {useRouter} from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { allStatus } from '../helpers/useStatus'
 import getTickets from '../helpers/getTickets'
 import { createTicket } from '../helpers/postTicket'
+import ErrorModal from '../components/ErrorModal'
+import SuccessModal from '../components/SuccessModal'
 
 export default {
   name: "Create",
+  components: { ErrorModal, SuccessModal },
   emit: ['reloadAfterCreate'],
   setup(props, { emit }){
 
     const router = useRouter()
     const { loadTicketCreateData, ticketCreateData } = getTickets()
+    const { createTicketSend, error, successTriggered } = createTicket()
+    const errorTriggered = ref(false)
     const clients = ref(null)
     const users = ref(null)
     const clientSelect = ref('defaultClient')
@@ -84,24 +92,26 @@ export default {
       users.value = ticketCreateData.value.users
     })
 
+    watch(() => {
+      if(error.value){
+        errorTriggered.value = true
+      }
+    })
+
     const handleClientClick = (clientSelect) => {
       poc.value = clientSelect.poc
       phone.value = clientSelect.phone
-      console.log("triggered")
     }
 
     const handleSubmit = async () => {
-      await createTicket(title, details, poc, phone, statusSelect, clientSelect)
-      router.push('/main')
+      await createTicketSend(title, details, poc, phone, statusSelect, clientSelect)
     }
 
     const handleCancel = () => {
       router.push('/main')
     }
 
-
-
-    return{handleCancel, handleClientClick, handleSubmit, allStatus, clients, users, title, poc, phone, details, clientSelect, statusSelect, userSelect}
+    return{handleCancel, handleClientClick, handleSubmit, allStatus, clients, users, title, poc, phone, details, clientSelect, statusSelect, userSelect, errorTriggered, successTriggered, error, router}
   }
 
 }

@@ -1,10 +1,8 @@
 import { ref } from 'vue'
 import axios from 'axios'
-import { useRouter } from 'vue-router'
 
 export const isAuthenticated = ref(false)
 export const user = ref(null)
-export const router = useRouter()
 
 export const auth = () => {
     const error = ref(null)
@@ -21,7 +19,7 @@ export const auth = () => {
 
             }
             else {
-                res.data.error = error
+                error.value = res.data.error
             }
     }   
     return{ login, error, isError }
