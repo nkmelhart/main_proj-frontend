@@ -4,7 +4,7 @@
 @modalClose="successTriggered = false; router.push('/main');" /> -->
   <div class="container">
     <h2 class="mt-4">Create Ticket</h2>
-    <hr class="mb-4">
+    <hr class="mb-4 mt-2">
       <form @submit.prevent>
         <div class="row form-group">
         <div class="col-5">

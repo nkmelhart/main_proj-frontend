@@ -31,10 +31,11 @@
       </div>
       <div>
         <h2 class="ms-3 mb-4" v-if="ticketsSearchResults.length && !isSearchTicketId">{{ticketsSearchResults.length}} results for "{{searchTermStatic}}"</h2>
-        <div v-else>
-          <h2 class="ms-3 mb-4" v-if="clicked" >No results for "{{searchTermStatic}}"</h2>
+        <div v-else-if="clicked && !ticketsSearchResults.length && !isSearchTicketId">
+          <h2 class="ms-3 mb-4" >No results for "{{searchTermStatic}}"</h2>
         </div>
-        <h2 class="ms-3 mb-4" v-if="ticketsSearchResults.length && isSearchTicketId">Ticket: "{{searchTermStatic}}"</h2>
+        <h2 class="ms-3 mb-4" v-else-if="ticketsSearchResults.length && isSearchTicketId">Ticket: "{{searchTermStatic}}"</h2>
+        <h2 class="ms-3 mb-4" v-else-if="!ticketsSearchResults.length && isSearchTicketId">No Ticket with ID: "{{searchTermStatic}}"</h2>
         <DisplayTicket v-if='ticketsSearchResults.length || ticketsSearchResults !== null' :tickets="ticketsSearchResults" />
       </div>
   </div>
@@ -57,9 +58,7 @@ export default {
     
 
     const boolActive = (isActive) => {
-      console.log(isActive.value)
       if(isActive.value === "activeTickets"){
-        console.log("true")
         return true
       }
       else{
@@ -72,13 +71,14 @@ export default {
       await loadTicketsSearchTerm(searchTerm.value, boolActive(activeSelect))
       searchTermStatic.value = searchTerm.value
       clicked.value = true
+      isSearchTicketId.value = false
+      console.log('ticketsearchresults length', ticketsSearchResults.value.length, 'ticket result', ticketsSearchResults.value)
     }
 
     const handleSearchTicketId = async () => {
       await loadTicketById(searchTerm.value, boolActive(activeSelect))
       searchTermStatic.value = searchTerm.value
       isSearchTicketId.value = true
-      console.log(ticketsSearchResults.value)
       clicked.value = true
     } 
 
@@ -86,11 +86,14 @@ export default {
       await loadTicketsByUser(searchTerm.value, boolActive(activeSelect))
       searchTermStatic.value = searchTerm.value
       clicked.value = true
+      isSearchTicketId.value = false
+      console.log('ticketsearchresults length', ticketsSearchResults.value.length, 'ticket result', ticketsSearchResults.value)
     }
 
     const handleSearchClient = async () => {
       await loadTicketsByClient(searchTerm.value, boolActive(activeSelect))
       searchTermStatic.value = searchTerm.value
+      isSearchTicketId.value = false
       clicked.value = true
     }
 

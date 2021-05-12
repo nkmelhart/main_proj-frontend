@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import axios from 'axios'
+import getTickets from '../helpers/getTickets'
 
 export const registerUser = () => {
 
@@ -31,6 +32,7 @@ export const registerUser = () => {
 export const updateUser = () => {
     const updateError = ref(null)
     const updateSuccess = ref(null)
+    const { tickets } = getTickets()
 
     const updateUserSend = async (userId, userName, email, role, phone, notes) => {
         try {
@@ -42,6 +44,13 @@ export const updateUser = () => {
                 notes: notes
             }
             let res = await axios.put(process.env.VUE_APP_USERS_URI + `/${userId}`, newUserData)
+
+            tickets.forEach(el => {
+                if (el.assignTo === userName) {
+                    
+                }
+            })
+
         } catch (err) {
             if (err.response) {
                 updateError.value = err.response

@@ -10,6 +10,7 @@ export const createTicket = () => {
 
     
     const createTicketSend = async (title, description, contactName, contactNumber, status, client) => {
+
         const newTicketData = {
             title: title,
             description: description,
@@ -41,13 +42,35 @@ export const createTicket = () => {
 }
 
 export const changeStatus = async (status, ticketId) => {
-
+    let res
+    
     const changeStatusResStatus = ref(null)
-    console.log(process.env.VUE_APP_TICKET_CHANGE_STATUS + '/' + ticketId)
-    const res = await axios.put(process.env.VUE_APP_TICKET_CHANGE_STATUS + '/' + ticketId, {
-        status: status
-    })
+    if (status === "Closed") {
+        console.log('here')
+        res = await axios.put(process.env.VUE_APP_TICKET_CHANGE_STATUS + '/' + ticketId, {
+            status: status,
+            active: false
+        })
+    }
+    else {
+        res = await axios.put(process.env.VUE_APP_TICKET_CHANGE_STATUS + '/' + ticketId, {
+            status: status,
+            active: true
+        })
+    }
     changeStatusResStatus.value = res.status
     return changeStatusResStatus
     
+}
+
+export const changeUser = async (user, ticketId) => {
+
+    const error = ref(null)
+    try {
+        const res = await axios.put(process.env.VUE_APP_TICKET_CHANGE_STATUS + `/${ticketId}`, {
+            assignTo: user._id
+        })
+    } catch (err) {
+        error.value = err.message
+    }
 }

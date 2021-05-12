@@ -3,7 +3,7 @@
 <ErrorModal v-if="errorCreateTriggered" :error="createError" @modalClose="errorCreateTriggered = false"/>
    <div class="container px-4">
         <div class="d-flex justify-content-between">
-            <div>
+            <div class="mb-2">
                 <h2>{{selectedTab}} Client</h2>
             </div>
             <div v-if="selectedTab === 'Edit' && clients.length">

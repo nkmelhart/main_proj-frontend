@@ -12,4 +12,6 @@ export const lowStatus = ref([
     'Waiting on Parts', 'Waiting on Customer', 'Waiting on Vendor', 'On Hold'
 ])
 
-export const allStatus = ref(highStatus.value.concat(normalStatus.value.concat(lowStatus.value)))
+export const closedStatus = ref(['Closed'])
+
+export const allStatus = ref(highStatus.value.concat(normalStatus.value.concat(lowStatus.value.concat(closedStatus.value))))

@@ -16,7 +16,7 @@
             <p class="card-text mt-3">{{ticket.description}}</p>
             <i class="mt-2">- Submitted on {{convertDate((ticket.createdAt).toString())}}</i>
             </div>
-              <div class="btn-toolbar mt-3">
+              <div class="btn-toolbar mt-3 d-flex">
                 <router-link :to="{ name: 'ViewNotes', params: { id: ticket._id} }" class="btn btn-primary me-3">View Notes</router-link>
                 <router-link :to="{ name: 'AddNotes', params: { id: ticket._id} }"  class="btn btn-primary me-3">Add Notes</router-link>
                 <div class="dropdown">
@@ -27,10 +27,18 @@
                   <li v-for="status in allStatus" @click="handleChangeStatus(status, ticket._id, ticket, statuses)" :key="status"><a class="dropdown-item" href="#">{{status}}</a></li>
                   </ul>
                 </div>
-                <a v-if="!isInClosed" href="#" class="btn btn-primary me-3">Close Ticket</a>
+                 <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle me-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  Assign To
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li v-for="user in users" @click="handleChangeUser(user, ticket._id)" :key="user"><a class="dropdown-item" href="#">{{user.name}}</a></li>
+                  </ul>
+                </div>
+                <i class="mt-3 ms-auto">Assigned to: {{ticket.assignTo.name}}</i>
               </div>
           </div>
-          <div class="col-4 border-start">
+          <div class="col-4 border-start mt-n1">
             <table class="table ">
               <tbody>
                 <tr>
@@ -46,7 +54,7 @@
                   <td>{{ticket.contactName}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">Point of Contact:</th>
+                  <th scope="row">Contact Number:</th>
                   <td>{{ticket.contactNumber}}</td>
                 </tr>
               </tbody>
@@ -63,11 +71,12 @@
 <script>
 
 import Subnav from '../components/Subnav'
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { allStatus } from '../helpers/useStatus'
-import { changeStatus } from '../helpers/postTicket'
+import { changeStatus, changeUser } from '../helpers/postTicket'
 import convertDate from '../helpers/convertDate'
+import getUsers from '../helpers/getUsers'
 
 export default{
   name: 'DisplayTickets',
@@ -75,6 +84,22 @@ export default{
   emits: ['filterTickets', 'statusChanged'],
   components: {Subnav},
   setup(props, {emit}){
+
+    const router = useRouter()
+
+    const { load, users, error } = getUsers()
+
+    onMounted(() => {
+      load()
+      console.log('here')
+    })
+
+    const checkPath = () => {
+      if (router.currentRoute.value.fullPath === '/searchtickets'){
+        console.log('true')
+        return true
+      }
+    }
 
     const route = useRoute()
 
@@ -111,20 +136,28 @@ export default{
 
     const handleChangeStatus = async (status, ticketId, ticket, statuses) => {
       const res = await changeStatus(status, ticketId)
-      // if(res.value === 200){
-      //   console.log('Success: ', res.value)
-      // }
-      console.log(statuses)
       ticket.status = status
-      console.log(statuses)
+      for( var i = 0; i < props.tickets.length; i++){
+        if(props.tickets[i].status === 'Closed'){
+          props.tickets.splice(i, 1)
+        }
+      }
       emit('statusChanged')
+    }
+
+    const handleChangeUser = async (user, ticketId) => {
+        const res = await changeUser(user, ticketId)
+         for( var i = 0; i < props.tickets.length; i++){
+        if(props.tickets[i]._id === ticketId){
+          props.tickets[i].assignTo.name = user.name
+        }}
     }
 
     const handleCloseClick = () => {
 
     }
 
-    return { isInClosed, statusButton, statuses, allStatus, handleChangeStatus, convertDate }
+    return { isInClosed, statusButton, statuses, allStatus, handleChangeStatus, convertDate, checkPath, users, handleChangeUser }
   }
 }
 
@@ -134,6 +167,10 @@ export default{
 
 div .container{
     border: none;
+}
+
+.mt-n1 {
+  margin-top: -0.5rem !important;
 }
 
 </style>
