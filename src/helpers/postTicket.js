@@ -9,7 +9,7 @@ export const createTicket = () => {
     const successTriggered = ref(false)
 
     
-    const createTicketSend = async (title, description, contactName, contactNumber, status, client) => {
+    const createTicketSend = async (title, description, contactName, contactNumber, status, client, user) => {
 
         const newTicketData = {
             title: title,
@@ -24,7 +24,8 @@ export const createTicket = () => {
                 description: description,
                 contactName: contactName,
                 contactNumber: contactNumber,
-                status: status
+                status: status,
+                assignTo: user._id
             })
             tickets.value.push(newTicketData)
             successTriggered.value = true

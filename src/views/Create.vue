@@ -101,6 +101,7 @@ export default {
       await loadTicketCreateData()
       clients.value = ticketCreateData.value.clients
       users.value = ticketCreateData.value.users
+      console.log(users.value)
     })
 
     watch(() => {
@@ -115,7 +116,7 @@ export default {
     }
 
     const handleSubmit = async () => {
-      await createTicketSend(title.value, details.value, poc.value, phone.value, statusSelect.value, clientSelect.value)
+      await createTicketSend(title.value, details.value, poc.value, phone.value, statusSelect.value, clientSelect.value, userSelect.value)
         if(successTriggered.value){
           clearFields()
           toast('Submission Successful')
